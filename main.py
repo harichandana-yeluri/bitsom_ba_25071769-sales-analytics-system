@@ -1,5 +1,4 @@
-from utils.file_handler import read_sales_data
-from utils.data_processor import parse_transactions, validate_and_filter
+from utils.file_handler import read_sales_data, parse_transactions, validate_and_filter
 
 
 def main():
@@ -62,7 +61,6 @@ def main():
 
         print(f"✓ Valid: {summary['final_count']} | Invalid: {invalid_count}\n")
 
-        # Remaining steps intentionally ignored as per instruction
         print("[5/10] Further analysis steps are not implemented in this task.")
         print()
         print("[10/10] Process Complete!")

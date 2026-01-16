@@ -165,7 +165,7 @@ def validate_and_filter(transactions, region=None, min_amount=None, max_amount=N
             if txn["Region"] == region
         ]
         filtered_by_region = before - len(valid_transactions)
-        print(f"Records after region filter ({region}): {len(valid_transactions)}")
+        print(f"Valid Records after region filter ({region}): {len(valid_transactions)}")
 
     # Apply amount filter
     filtered_by_amount = 0
@@ -179,7 +179,7 @@ def validate_and_filter(transactions, region=None, min_amount=None, max_amount=N
             )
         ]
         filtered_by_amount = before - len(valid_transactions)
-        print(f"Records after amount filter: {len(valid_transactions)}")
+        print(f"Valid Records after amount filter: {len(valid_transactions)}")
 
     filter_summary = {
         "total_input": total_input,
