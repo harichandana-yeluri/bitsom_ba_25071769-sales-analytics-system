@@ -1,4 +1,8 @@
-from utils.file_handler import read_sales_data, parse_transactions, validate_and_filter
+from utils.file_handler import (
+    read_sales_data,
+    parse_transactions,
+    validate_and_filter
+)
 from utils.data_processor import (
     calculate_total_revenue,
     region_wise_sales,
@@ -6,6 +10,12 @@ from utils.data_processor import (
     customer_analysis,
     SalesDateAnalyzer,
     low_performing_products
+)
+from utils.api_handler import (
+    fetch_all_products,
+    create_product_mapping,
+    enrich_sales_data,
+    save_enriched_data
 )
 
 
@@ -104,6 +114,39 @@ def main():
 
         low_products = low_performing_products(valid_transactions)
         print("✓ Low performing products identified\n")
+
+        # -----------------------------
+        # STEP 9: Fetch products from API
+        # -----------------------------
+        print("[9/10] Fetching product data from API...")
+        api_products = fetch_all_products()
+
+        if not api_products:
+            print("⚠ No product data fetched. Skipping enrichment.")
+            return
+
+        product_mapping = create_product_mapping(api_products)
+
+        # -----------------------------
+        # STEP 10: Enrich sales data
+        # -----------------------------
+        print("[10/10] Enriching sales data...")
+        enriched_transactions = enrich_sales_data(valid_transactions, product_mapping)
+
+        matched = sum(1 for txn in enriched_transactions if txn.get("API_Match"))
+        total = len(enriched_transactions)
+        percentage = (matched / total * 100) if total else 0
+
+        print(f"✓ Enriched {matched}/{total} transactions ({percentage:.2f}%)")
+
+        # -----------------------------
+        # STEP 11: Save enriched data
+        # -----------------------------
+        print("\nSaving enriched data...")
+        save_enriched_data(enriched_transactions)
+
+        print("\n[✔] Process Complete!")
+        print("=" * 40)
 
         print("[10/10] Process Complete!")
         print("=" * 40)
