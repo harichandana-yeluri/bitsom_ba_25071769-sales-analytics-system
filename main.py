@@ -1,9 +1,17 @@
 from utils.file_handler import read_sales_data, parse_transactions, validate_and_filter
+from utils.data_processor import (
+    calculate_total_revenue,
+    region_wise_sales,
+    top_selling_products,
+    customer_analysis,
+    SalesDateAnalyzer,
+    low_performing_products
+)
 
 
 def main():
     """
-    Main execution function (up to validation & filtering only)
+    Main execution function (up to validation & filtering + Part 2 analysis)
     """
     try:
         print("=" * 40)
@@ -24,7 +32,7 @@ def main():
         # Step 3: Display filter options
         print("[3/10] Filter Options Available:")
 
-        # Call validation once to display regions and amount range
+        # Preview validation to show regions and amount range
         _valid_preview, _invalid_preview, _ = validate_and_filter(transactions)
 
         print()
@@ -59,10 +67,44 @@ def main():
             max_amount=max_amount
         )
 
-        print(f"✓ Valid: {summary['final_count']} | Invalid: {invalid_count}\n")
+        print("✓ Validation Summary")
+        print(f"  Total input records        : {summary['total_input']}")
+        print(f"  Invalid records (cleaning): {summary['invalid']}")
+        print(f"  Filtered by region        : {summary['filtered_by_region']}")
+        print(f"  Filtered by amount        : {summary['filtered_by_amount']}")
+        print(f"  Final valid transactions  : {summary['final_count']}\n")
 
-        print("[5/10] Further analysis steps are not implemented in this task.")
-        print()
+
+
+
+        # Step 8: Perform all data analyses (Part 2)
+        print("[8/10] Performing sales data analysis...")
+
+        total_revenue = calculate_total_revenue(valid_transactions)
+        print(f"✓ Total Revenue Calculated: ₹{round(total_revenue, 2)}")
+
+        region_sales = region_wise_sales(valid_transactions)
+        print("✓ Region-wise sales analysis complete")
+
+        top_products = top_selling_products(valid_transactions)
+        print("✓ Top selling products identified")
+
+        customer_stats = customer_analysis(valid_transactions)
+        print("✓ Customer purchase analysis complete")
+
+        daily_trend = SalesDateAnalyzer(valid_transactions).daily_sales_trend()
+        print("✓ Daily sales trend calculated")
+
+        peak_date, peak_revenue, peak_count = SalesDateAnalyzer(valid_transactions).find_peak_sales_day()
+        print(
+            f"✓ Peak Sales Day: {peak_date} | "
+            f"Revenue: ₹{peak_revenue} | "
+            f"Transactions: {peak_count}"
+        )
+
+        low_products = low_performing_products(valid_transactions)
+        print("✓ Low performing products identified\n")
+
         print("[10/10] Process Complete!")
         print("=" * 40)
 

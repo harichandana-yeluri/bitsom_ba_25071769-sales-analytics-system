@@ -120,6 +120,7 @@ def validate_and_filter(transactions, region=None, min_amount=None, max_amount=N
     # Collect region and amount info for display
     available_regions = set()
     amounts = []
+    region_valid_transactions = []
 
     for txn in transactions:
         # Check required fields
@@ -141,6 +142,10 @@ def validate_and_filter(transactions, region=None, min_amount=None, max_amount=N
             invalid_count += 1
             continue
 
+        if not str(txn["Region"]).strip():
+            invalid_count += 1
+            continue
+
         amount = txn["Quantity"] * txn["UnitPrice"]
 
         available_regions.add(txn["Region"])
@@ -159,34 +164,33 @@ def validate_and_filter(transactions, region=None, min_amount=None, max_amount=N
     # Apply region filter
     filtered_by_region = 0
     if region:
-        before = len(valid_transactions)
-        valid_transactions = [
+        region_valid_transactions = [
             txn for txn in valid_transactions
             if txn["Region"] == region
         ]
-        filtered_by_region = before - len(valid_transactions)
-        print(f"Valid Records after region filter ({region}): {len(valid_transactions)}")
+    else:
+        region_valid_transactions = valid_transactions.copy()
+    filtered_by_region = len(region_valid_transactions)
 
     # Apply amount filter
     filtered_by_amount = 0
     if min_amount is not None or max_amount is not None:
-        before = len(valid_transactions)
-        valid_transactions = [
-            txn for txn in valid_transactions
+        region_valid_transactions = [
+            txn for txn in region_valid_transactions
             if (
                 (min_amount is None or txn["TransactionAmount"] >= min_amount)
                 and (max_amount is None or txn["TransactionAmount"] <= max_amount)
             )
         ]
-        filtered_by_amount = before - len(valid_transactions)
-        print(f"Valid Records after amount filter: {len(valid_transactions)}")
+    filtered_by_amount = len(region_valid_transactions)
 
     filter_summary = {
         "total_input": total_input,
         "invalid": invalid_count,
         "filtered_by_region": filtered_by_region,
         "filtered_by_amount": filtered_by_amount,
-        "final_count": len(valid_transactions)
+        "final_count": len(region_valid_transactions)
     }
 
-    return valid_transactions, invalid_count, filter_summary
+    return region_valid_transactions, invalid_count, filter_summary
+
