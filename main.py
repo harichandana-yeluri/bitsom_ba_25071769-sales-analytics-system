@@ -321,17 +321,17 @@ def main():
         print(f"✓ Total Revenue Calculated: ₹{round(total_revenue, 2)}")
 
         region_sales = region_wise_sales(valid_transactions)
-        print("✓ Region-wise sales analysis complete", region_sales)
+        print("✓ Region-wise sales analysis complete")
 
         top_products = top_selling_products(valid_transactions)
-        print("✓ Top selling products identified", top_products)
+        print("✓ Top selling products identified")
 
         customer_stats = customer_analysis(valid_transactions)
-        print("✓ Customer purchase analysis complete", customer_stats)
+        print("✓ Customer purchase analysis complete")
 
         analyzer = SalesDateAnalyzer(valid_transactions)
         daily_trend = analyzer.daily_sales_trend()
-        print("✓ Daily sales trend calculated", daily_trend)
+        print("✓ Daily sales trend calculated")
 
         peak_date, peak_revenue, peak_count = analyzer.find_peak_sales_day()
         print(
@@ -341,7 +341,7 @@ def main():
         )
 
         low_products = low_performing_products(valid_transactions)
-        print("✓ Low performing products identified\n", low_products)
+        print("✓ Low performing products identified\n")
 
         # -----------------------------
         # STEP 9: Fetch products from API

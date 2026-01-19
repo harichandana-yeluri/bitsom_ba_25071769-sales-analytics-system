@@ -1,0 +1,2 @@
+# Here is the list of dependencies for the sales analytics system
+requests
