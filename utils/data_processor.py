@@ -15,7 +15,7 @@ def calculate_total_revenue(transactions):
 
             total_revenue += quantity * unit_price
 
-        except (TypeError, ValueError):
+        except (TypeError, ValueError, AttributeError):
             # Skip transactions with unexpected data types
             continue
 
@@ -98,12 +98,6 @@ def top_selling_products(transactions, n=5):
     )[:n]
 
 def customer_analysis(transactions):
-    """
-    Analyzes customer purchase patterns
-
-    Returns: dictionary of customer statistics
-    """
-
     customer_stats = {}
 
     for txn in transactions:
@@ -123,24 +117,15 @@ def customer_analysis(transactions):
         stats["purchase_count"] += 1
         stats["products_bought"].add(txn["ProductName"])
 
-    return dict(
-        sorted(
-            (
-                cust,
-                {
-                    "total_spent": round(data["total_spent"], 2),
-                    "purchase_count": data["purchase_count"],
-                    "avg_order_value": round(
-                        data["total_spent"] / data["purchase_count"], 2
-                    ),
-                    "products_bought": sorted(data["products_bought"])
-                }
-            )
-            for cust, data in customer_stats.items()
-        ),
-        key=lambda item: item[1]["total_spent"],
-        reverse=True
-    )
+    # Final formatting
+    for cust, data in customer_stats.items():
+        data["total_spent"] = round(data["total_spent"], 2)
+        data["avg_order_value"] = round(
+            data["total_spent"] / data["purchase_count"], 2
+        )
+        data["products_bought"] = sorted(data["products_bought"])
+
+    return customer_stats
 
 # Task 2.2: Date-based Analysis
 
