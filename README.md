@@ -76,7 +76,7 @@ TransactionID|Date|ProductID|ProductName|Quantity|UnitPrice|CustomerID|Region
 ### 1️⃣ Install dependencies
 ```bash
 pip install -r requirements.txt
-
+```
 ---
 
 
