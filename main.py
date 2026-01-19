@@ -232,7 +232,7 @@ def generate_sales_report(
             else:
                 f.write("All products enriched successfully.\n")
 
-        print(f"✓ Report successfully saved to: {output_file}")
+        print(f"✓ Report saved to: {output_file}\n")
 
     except FileNotFoundError:
         print("❌ Report Error: Output directory does not exist.")
@@ -314,39 +314,34 @@ def main():
 
 
 
-        # Step 8: Perform all data analyses (Part 2)
-        print("[8/10] Performing sales data analysis...")
+        # Step 5: Perform all data analyses (Part 2)
+        print("[5/10] Analyzing sales data...")
 
         total_revenue = calculate_total_revenue(valid_transactions)
-        print(f"✓ Total Revenue Calculated: ₹{round(total_revenue, 2)}")
+        print(f"✓ Total Revenue Calculated...")
 
         region_sales = region_wise_sales(valid_transactions)
-        print("✓ Region-wise sales analysis complete")
+        print("✓ Region-wise sales analysis complete...")
 
         top_products = top_selling_products(valid_transactions)
-        print("✓ Top selling products identified")
+        print("✓ Top selling products identified...")
 
         customer_stats = customer_analysis(valid_transactions)
-        print("✓ Customer purchase analysis complete")
+        print("✓ Customer purchase analysis complete...")
 
         analyzer = SalesDateAnalyzer(valid_transactions)
         daily_trend = analyzer.daily_sales_trend()
-        print("✓ Daily sales trend calculated")
+        print("✓ Daily sales trend calculated...")
 
         peak_date, peak_revenue, peak_count = analyzer.find_peak_sales_day()
-        print(
-            f"✓ Peak Sales Day: {peak_date} | "
-            f"Revenue: ₹{peak_revenue} | "
-            f"Transactions: {peak_count}"
-        )
+        print("✓ Peak sales day identified...")
 
         low_products = low_performing_products(valid_transactions)
-        print("✓ Low performing products identified\n")
+        print("✓ Low performing products identified...\n")
 
-        # -----------------------------
-        # STEP 9: Fetch products from API
-        # -----------------------------
-        print("[9/10] Fetching product data from API...")
+        
+        # STEP 6: Fetch products from API
+        print("[6/10] Fetching product data from API...")
         api_products = fetch_all_products()
 
         if not api_products:
@@ -355,10 +350,8 @@ def main():
 
         product_mapping = create_product_mapping(api_products)
 
-        # -----------------------------
-        # STEP 10: Enrich sales data
-        # -----------------------------
-        print("[10/10] Enriching sales data...")
+        # STEP 7: Enrich sales data
+        print("[7/10] Enriching sales data...")
         enriched_transactions = enrich_sales_data(valid_transactions, product_mapping)
 
         matched = sum(1 for txn in enriched_transactions if txn.get("API_Match"))
@@ -367,15 +360,12 @@ def main():
 
         print(f"✓ Enriched {matched}/{total} transactions ({percentage:.2f}%)")
 
-        # -----------------------------
-        # STEP 11: Save enriched data
-        # -----------------------------
-        print("\nSaving enriched data...")
+        # STEP 8: Save enriched data
+        print("\n[8/10] Saving enriched data...")
         save_enriched_data(enriched_transactions)
 
-        print("\n[✔] Process Complete!")
-        print("=" * 40)
-
+        # STEP 9: Generate comprehensive report
+        print("[9/10] Generating sales report...")
         generate_sales_report(
             valid_transactions=valid_transactions,
             total_revenue=total_revenue,
@@ -387,7 +377,6 @@ def main():
             low_products=low_products,
             enriched_transactions=enriched_transactions
         )
-
 
         print("[10/10] Process Complete!")
         print("=" * 40)

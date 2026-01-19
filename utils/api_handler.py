@@ -31,7 +31,7 @@ def fetch_all_products():
                 "rating": product.get("rating")
             })
 
-        print(f"✓ Successfully fetched {len(cleaned_products)} products from API")
+        print(f"✓ Successfully fetched {len(cleaned_products)} products\n")
         return cleaned_products
 
     except requests.exceptions.RequestException as e:
@@ -137,7 +137,7 @@ def save_enriched_data(enriched_transactions, filename="data/enriched_sales_data
 
                 file.write("|".join(row) + "\n")
 
-        print(f"✓ Enriched data saved to: {filename}")
+        print(f"✓ Enriched data saved to: {filename}\n")
 
     except Exception as e:
         print("❌ Failed to save enriched data")
